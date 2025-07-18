@@ -1,0 +1,22 @@
+image: gitpod/workspace-android
+
+tasks:
+  - name: Setup and Build VoiceMesh
+    init: |
+      cd voicemesh-android
+      chmod +x gradlew
+      ./gradlew clean assembleDebug
+    command: |
+      echo "🚀 VoiceMesh APK built successfully!"
+      echo "📱 APK location: voicemesh-android/app/build/outputs/apk/debug/app-debug.apk"
+      echo "💾 Download the APK to install on your Android devices"
+
+ports:
+  - port: 8080
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
+    - redhat.java
+    - ms-vscode.vscode-json 

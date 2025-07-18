@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VoiceMesh</string>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_bluetooth_title">Bluetooth Required</string>
+    <string name="onboarding_bluetooth_description">VoiceMesh uses Bluetooth to create a mesh network for voice messages</string>
+    <string name="onboarding_location_title">Location Permission</string>
+    <string name="onboarding_location_description">Required for Bluetooth scanning on Android</string>
+    <string name="onboarding_microphone_title">Microphone Access</string>
+    <string name="onboarding_microphone_description">Required to record voice messages</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_enable">Enable</string>
+    
+    <!-- Voice Recording -->
+    <string name="hold_to_record">Hold to Record</string>
+    <string name="recording">Recording…</string>
+    <string name="release_to_send">Release to Send</string>
+    <string name="swipe_to_cancel">Swipe to Cancel</string>
+    <string name="voice_message_too_long">Voice message too long (max 60 seconds)</string>
+    <string name="voice_message_too_short">Voice message too short</string>
+    
+    <!-- Voice Messages -->
+    <string name="voice_message">Voice Message</string>
+    <string name="play_voice_message">Play voice message</string>
+    <string name="voice_message_expires">Expires in %s</string>
+    <string name="voice_message_expired">Voice message expired</string>
+    <string name="voice_message_delivered">Delivered</string>
+    <string name="voice_message_pending">Pending</string>
+    <string name="voice_message_sending">Sending</string>
+    <string name="voice_message_failed">Failed to send</string>
+    
+    <!-- Peers -->
+    <string name="connected_peers">%d Connected</string>
+    <string name="no_peers_connected">No peers connected</string>
+    <string name="voice_capable_peer">Voice capable</string>
+    <string name="peer_offline">Offline</string>
+    
+    <!-- Network -->
+    <string name="mesh_network_status">Mesh Network</string>
+    <string name="network_strength_excellent">Excellent</string>
+    <string name="network_strength_good">Good</string>
+    <string name="network_strength_fair">Fair</string>
+    <string name="network_strength_poor">Poor</string>
+    
+    <!-- Errors -->
+    <string name="error_microphone_permission">Microphone permission required</string>
+    <string name="error_recording_failed">Recording failed</string>
+    <string name="error_playback_failed">Playback failed</string>
+    <string name="error_bluetooth_disabled">Bluetooth is disabled</string>
+    <string name="error_no_peers">No peers available</string>
+    
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="voice_quality">Voice Quality</string>
+    <string name="auto_delete_messages">Auto-delete messages</string>
+    <string name="message_retention_time">Message retention time</string>
+    <string name="clear_all_messages">Clear all messages</string>
+    
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="retry">Retry</string>
+</resources> 
