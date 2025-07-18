@@ -23,6 +23,31 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
+    - name: Debug repository structure
+      run: |
+        echo "Repository root contents:"
+        ls -la
+        echo "Looking for Android project files..."
+        find . -name "build.gradle*" -o -name "gradlew*" -o -name "app" -type d | head -10
+        
+    - name: Determine project directory
+      id: project-dir
+      run: |
+        if [ -f "./gradlew" ]; then
+          echo "ANDROID_PROJECT_DIR=." >> $GITHUB_OUTPUT
+          echo "Found Android project in root directory"
+        elif [ -f "./voicemesh-android/gradlew" ]; then
+          echo "ANDROID_PROJECT_DIR=./voicemesh-android" >> $GITHUB_OUTPUT
+          echo "Found Android project in voicemesh-android directory"
+        elif [ -f "./android/gradlew" ]; then
+          echo "ANDROID_PROJECT_DIR=./android" >> $GITHUB_OUTPUT
+          echo "Found Android project in android directory"
+        else
+          echo "Could not find Android project. Looking for build.gradle files:"
+          find . -name "build.gradle*" -exec dirname {} \; | head -5
+          exit 1
+        fi
+        
     - name: Cache Gradle packages
       uses: actions/cache@v4
       with:
@@ -35,17 +60,29 @@ jobs:
           
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-      working-directory: ./voicemesh-android
+      working-directory: ${{ steps.project-dir.outputs.ANDROID_PROJECT_DIR }}
       
     - name: Build debug APK
       run: ./gradlew assembleDebug
-      working-directory: ./voicemesh-android
+      working-directory: ${{ steps.project-dir.outputs.ANDROID_PROJECT_DIR }}
       
+    - name: Find APK file
+      id: find-apk
+      run: |
+        APK_PATH=$(find . -name "app-debug.apk" -type f | head -1)
+        if [ -z "$APK_PATH" ]; then
+          echo "APK not found. Looking for any APK files:"
+          find . -name "*.apk" -type f
+          exit 1
+        fi
+        echo "APK_PATH=$APK_PATH" >> $GITHUB_OUTPUT
+        echo "Found APK at: $APK_PATH"
+        
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: voicemesh-debug-apk
-        path: voicemesh-android/app/build/outputs/apk/debug/app-debug.apk
+        path: ${{ steps.find-apk.outputs.APK_PATH }}
         
     - name: Create Release
       if: github.ref == 'refs/heads/main'
