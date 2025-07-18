@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.voicemesh.android.core.VoiceMeshService
+import kotlinx.coroutines.flow.asStateFlow
 import com.voicemesh.android.ui.VoiceMeshScreen
 import com.voicemesh.android.ui.VoiceMeshViewModel
 import com.voicemesh.android.ui.theme.VoiceMeshTheme
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
         object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return VoiceMeshViewModel(application, voiceMeshService) as T
+                return VoiceMeshViewModel(application) as T
             }
         }
     }
@@ -176,7 +177,7 @@ class MainActivity : ComponentActivity() {
         
         lifecycleScope.launch {
             try {
-                val initialized = voiceMeshService.initialize()
+                val initialized = voiceMeshService.start()
                 
                 if (initialized) {
                     // Set up service delegate

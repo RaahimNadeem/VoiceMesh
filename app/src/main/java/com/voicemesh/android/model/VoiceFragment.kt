@@ -106,7 +106,7 @@ data class VoiceFragment(
                 
                 // Read header
                 val version = buffer.get().toUByte()
-                if (version != 1u.toByte()) return null
+                if (version != 1u.toUByte()) return null
                 
                 val messageIDLength = buffer.get().toInt()
                 val messageID = String(ByteArray(messageIDLength).also { buffer.get(it) })

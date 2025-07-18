@@ -58,7 +58,7 @@ class VoiceMeshService(
             }
             
             Log.i(TAG, "Starting VoiceMesh service")
-            isActive = true
+            this@VoiceMeshService.isActive = true
             
             // Setup network callbacks
             networkService?.let { network ->
@@ -72,7 +72,7 @@ class VoiceMeshService(
                         onVoiceMessageFailed(messageID, "Network transmission failed")
                     }
                 }
-                network.onNetworkStateChanged = { active -> onNetworkStateChanged(active) }
+                network.onNetworkStateChanged = { isNetworkActive -> onNetworkStateChanged(isNetworkActive) }
             }
             
             delegate?.onServiceStateChanged(true)
@@ -81,7 +81,7 @@ class VoiceMeshService(
             true
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start VoiceMesh service", e)
-            isActive = false
+            this@VoiceMeshService.isActive = false
             delegate?.onServiceError("Failed to start service: ${e.message}")
             false
         }
@@ -98,7 +98,7 @@ class VoiceMeshService(
             }
             
             Log.i(TAG, "Stopping VoiceMesh service")
-            isActive = false
+            this@VoiceMeshService.isActive = false
             
             // Stop any ongoing recording or playback
             cancelCurrentRecording()

@@ -79,7 +79,7 @@ data class EphemeralVoiceMessage(
                 
                 // Read header
                 val version = buffer.get().toUByte()
-                if (version != 1u.toByte()) return null
+                if (version != 1u.toUByte()) return null
                 
                 val idLength = buffer.get().toInt()
                 val id = String(ByteArray(idLength).also { buffer.get(it) })

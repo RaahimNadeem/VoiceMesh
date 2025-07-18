@@ -71,7 +71,7 @@ class VoicePlayer(private val context: Context) {
                 setOnPreparedListener { player ->
                     Log.i(TAG, "MediaPlayer prepared, starting playback")
                     player.start()
-                    isPlaying = true
+                    this@VoicePlayer.isPlaying = true
                     
                     CoroutineScope(Dispatchers.Main).launch {
                         onPlaybackStarted?.invoke()
@@ -83,7 +83,7 @@ class VoicePlayer(private val context: Context) {
                 
                 setOnCompletionListener { player ->
                     Log.i(TAG, "Playback completed for message: $messageId")
-                    isPlaying = false
+                    this@VoicePlayer.isPlaying = false
                     
                     CoroutineScope(Dispatchers.Main).launch {
                         onPlaybackCompleted?.invoke()
@@ -95,7 +95,7 @@ class VoicePlayer(private val context: Context) {
                 
                 setOnErrorListener { player, what, extra ->
                     Log.e(TAG, "MediaPlayer error: what=$what, extra=$extra")
-                    isPlaying = false
+                    this@VoicePlayer.isPlaying = false
                     
                     CoroutineScope(Dispatchers.Main).launch {
                         onPlaybackError?.invoke("Playback error: $what")

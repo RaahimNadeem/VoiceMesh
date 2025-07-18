@@ -10,8 +10,6 @@
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorTertiary">@android:color/holo_green_light</item>
         <item name="colorOnTertiary">@android:color/black</item>
-        <item name="colorBackground">@android:color/black</item>
-        <item name="colorOnBackground">@android:color/white</item>
         <item name="colorSurface">@android:color/black</item>
         <item name="colorOnSurface">@android:color/white</item>
         <item name="android:windowBackground">@android:color/black</item>

@@ -79,7 +79,9 @@ class VoiceRecorder(private val context: Context) {
                     when (what) {
                         MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED -> {
                             Log.i(TAG, "Max duration reached, stopping recording")
-                            stopRecording()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                stopRecording()
+                            }
                         }
                     }
                 }
@@ -391,4 +393,6 @@ data class RecordingState(
     fun isNearMaxDuration(): Boolean {
         return remainingMs < 10000 // Less than 10 seconds remaining
     }
-} 
+}
+
+ 

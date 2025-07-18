@@ -6,7 +6,7 @@ import android.util.Log
 import com.voicemesh.android.model.CompressionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.lz4.LZ4Factory
+import net.jpountz.lz4.LZ4Factory
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
