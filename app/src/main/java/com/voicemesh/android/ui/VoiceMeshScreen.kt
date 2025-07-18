@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontFamily
 import com.voicemesh.android.audio.RecordingState
 import com.voicemesh.android.audio.PlaybackState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -242,6 +243,7 @@ private fun ServiceStatusCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecipientSelectionCard(
     selectedRecipient: VoicePeer?,
@@ -712,15 +714,12 @@ private fun VoiceMessageItem(
 }
 
 // Preview functions for Android Studio Design panel
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, backgroundColor = 0xFF0D1117)
 @Composable
 fun VoiceMeshScreenPreview() {
     // Mock ViewModel for preview
-    val mockViewModel = object : VoiceMeshViewModel() {
-        init {
-            // Initialize with sample data for preview
-        }
-    }
+    val mockViewModel = VoiceMeshViewModel(androidx.compose.ui.platform.LocalContext.current.applicationContext as android.app.Application)
     
     VoiceMeshScreen(viewModel = mockViewModel)
 }

@@ -93,7 +93,7 @@ class VoiceMeshNetworkService(private val context: Context) {
         
         try {
             // Create fragments from the voice message
-            val fragments = fragmentManager.createFragments(message)
+            val fragments = fragmentManager.fragmentVoiceMessage(message)
             if (fragments.isEmpty()) {
                 Log.e(TAG, "Failed to create fragments for message ${message.id}")
                 return@withContext false
@@ -323,16 +323,13 @@ class VoiceMeshNetworkService(private val context: Context) {
      * Set up fragment manager callbacks
      */
     private fun setupFragmentCallbacks() {
-        fragmentManager.onMessageComplete = { messageID, audioData ->
+        fragmentManager.setMessageReassembledCallback { messageID, audioData ->
             handleCompleteVoiceMessage(messageID, audioData)
         }
         
-        fragmentManager.onReassemblyTimeout = { messageID ->
-            Log.w(TAG, "Voice message reassembly timeout: $messageID")
-        }
-        
-        fragmentManager.onReassemblyError = { messageID, error ->
-            Log.e(TAG, "Voice message reassembly error for $messageID: $error")
+        fragmentManager.setReassemblyFailedCallback { messageID, error ->
+            Log.w(TAG, "Voice message reassembly failed for $messageID: $error")
+            delegate?.onReassemblyError(messageID, error)
         }
     }
     
@@ -351,7 +348,7 @@ class VoiceMeshNetworkService(private val context: Context) {
                 nickname = "VoicePeer-${peerID.take(8)}", // Generate display name
                 fingerprint = peerID, // Simplified for now
                 voiceCapable = true,
-                lastSeen = Date(),
+                lastSeen = System.currentTimeMillis(),
                 isOnline = true
             )
             
@@ -367,7 +364,7 @@ class VoiceMeshNetworkService(private val context: Context) {
      */
     private fun handlePeerDisconnected(peerID: String) {
         voicePeers[peerID]?.let { peer ->
-            voicePeers[peerID] = peer.copy(isOnline = false, lastSeen = Date())
+            voicePeers[peerID] = peer.copy(isOnline = false, lastSeen = System.currentTimeMillis())
             delegate?.onPeerDisconnected(peerID)
             Log.d(TAG, "Voice peer disconnected: ${peer.nickname}")
         }
@@ -395,11 +392,11 @@ class VoiceMeshNetworkService(private val context: Context) {
     private fun handleCompleteVoiceMessage(messageID: String, audioData: ByteArray) {
         try {
             // Parse the complete voice message
-            val voiceMessage = EphemeralVoiceMessage.fromBinaryPayload(audioData)
+            val voiceMessage = EphemeralVoiceMessage.fromBinary(audioData)
             if (voiceMessage != null) {
                 val senderPeer = voicePeers[voiceMessage.senderID]
                 if (senderPeer != null) {
-                    delegate?.onVoiceMessageReceived(voiceMessage, senderPeer)
+                    delegate?.onVoiceMessageReceived(voiceMessage)
                     
                     // Send delivery confirmation
                     networkScope.launch {

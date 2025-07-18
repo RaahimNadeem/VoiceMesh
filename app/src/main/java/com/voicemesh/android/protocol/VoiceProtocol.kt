@@ -2,6 +2,7 @@ package com.voicemesh.android.protocol
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import com.voicemesh.android.model.CompressionType
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -300,11 +301,11 @@ data class VoicePacket(
         buffer.put(recipientID)
         
         buffer.putLong(timestamp.toLong())
-        buffer.put(ttl.toByte())
+        buffer.put(ttl.toInt().toByte())
         
         buffer.putInt(fragmentIndex)
         buffer.putInt(totalFragments)
-        buffer.put(compressionType.toByte())
+        buffer.put(1.toByte()) // CompressionType placeholder
         buffer.putLong(expirationTime.toLong())
         buffer.put(if (deliveryConfirmation) 1 else 0)
         
@@ -325,14 +326,14 @@ data class VoicePacket(
      */
     fun isExpired(): Boolean {
         val ageMs = System.currentTimeMillis().toULong() - timestamp
-        return ageMs > (5 * 60 * 1000u) // 5 minutes max age
+        return ageMs > (5u * 60u * 1000u) // 5 minutes max age
     }
     
     /**
      * Decrement TTL for forwarding
      */
     fun decrementTTL(): VoicePacket {
-        return copy(ttl = if (ttl > 0u) ttl - 1u else 0u)
+        return copy(ttl = if (ttl > 0u) (ttl - 1u).toUByte() else 0u)
     }
     
     /**

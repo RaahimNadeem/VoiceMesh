@@ -11,7 +11,7 @@ interface VoiceMeshNetworkDelegate {
     /**
      * Called when a voice message is successfully delivered
      */
-    fun onVoiceMessageDelivered(messageId: String)
+    fun onVoiceMessageDelivered(messageId: String, peer: VoicePeer)
     
     /**
      * Called when a network error occurs
